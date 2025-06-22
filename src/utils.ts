@@ -1,13 +1,15 @@
+import moment from 'moment-timezone';
 import { DayOneImporterSettings } from './main';
 import { DayOneItem } from './schema';
 import { normalizePath } from 'obsidian';
-const moment = require('moment-timezone');
 import { ZodError } from 'zod';
 
 export function buildFileName(
 	settings: DayOneImporterSettings,
 	item: DayOneItem
 ) {
+	let fileName = '';
+
 	if (settings.dateBasedFileNames) {
 		const dateSettings = item.isAllDay
 			? settings.dateBasedAllDayFileNameFormat
@@ -21,12 +23,16 @@ export function buildFileName(
 			date = date.tz(item.location.timeZoneName);
 		}
 
-		let fileName = date.format(dateSettings);
-
-		return normalizePath(`${fileName}.md`);
+		fileName = date.format(dateSettings);
 	} else {
-		return normalizePath(`${item.uuid}.md`);
+		fileName = item.uuid;
 	}
+
+	if (settings.appendEntryTitleToFileName) {
+		fileName = `${fileName} - ${getTitle(item)}`;
+	}
+
+	return normalizePath(`${fileName}.md`);
 }
 
 function getTitle(item: DayOneItem): string {

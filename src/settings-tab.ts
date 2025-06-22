@@ -135,6 +135,17 @@ export class SettingsTab extends PluginSettingTab {
 					})
 			);
 
+		new Setting(containerEl)
+			.setName('Append entry title to file name')
+			.addToggle((toggle) =>
+				toggle
+					.setValue(this.plugin.settings.appendEntryTitleToFileName)
+					.onChange(async (value) => {
+						this.plugin.settings.appendEntryTitleToFileName = value;
+						await this.plugin.saveSettings();
+					})
+			);
+
 		new Setting(containerEl).setName('FrontMatter').setHeading();
 
 		new Setting(containerEl)
