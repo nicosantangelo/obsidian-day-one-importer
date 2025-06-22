@@ -1,6 +1,7 @@
 import { DayOneImporterSettings } from './main';
 import { DayOneItem } from './schema';
-import { moment, normalizePath } from 'obsidian';
+import { normalizePath } from 'obsidian';
+const moment = require('moment-timezone');
 import { ZodError } from 'zod';
 
 export function buildFileName(
@@ -8,18 +9,29 @@ export function buildFileName(
 	item: DayOneItem
 ) {
 	if (settings.dateBasedFileNames) {
-		if (item.isAllDay) {
-			return normalizePath(
-				`${moment(item.creationDate).format(settings.dateBasedAllDayFileNameFormat)}.md`
-			);
-		} else {
-			return normalizePath(
-				`${moment(item.creationDate).format(settings.dateBasedFileNameFormat)}.md`
-			);
+		const dateSettings = item.isAllDay
+			? settings.dateBasedAllDayFileNameFormat
+			: settings.dateBasedFileNameFormat;
+
+		let date = moment(item.creationDate);
+
+		if (item.timeZone) {
+			date = date.tz(item.timeZone);
+		} else if (item.location?.timeZoneName) {
+			date = date.tz(item.location.timeZoneName);
 		}
+
+		let fileName = date.format(dateSettings);
+
+		return normalizePath(`${fileName}.md`);
 	} else {
 		return normalizePath(`${item.uuid}.md`);
 	}
+}
+
+function getTitle(item: DayOneItem): string {
+	const match = item.text.match(/^# (.+)\s/);
+	return match ? match[1] : '';
 }
 
 export type ImportFailure = { entry: DayOneItem; reason: string };

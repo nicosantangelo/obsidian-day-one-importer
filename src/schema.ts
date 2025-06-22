@@ -8,6 +8,7 @@ export const DayOneItemSchema = z.object({
 	starred: z.boolean().optional(),
 	tags: z.array(z.string()).optional(),
 	text: z.string().default(''),
+	timeZone: z.string().default(''),
 	userActivity: z
 		.object({
 			activityName: z.string().optional(),
@@ -18,6 +19,7 @@ export const DayOneItemSchema = z.object({
 			localityName: z.string().optional(),
 			country: z.string().optional(),
 			placeName: z.string().optional(),
+			timeZoneName: z.string().optional(),
 			latitude: z.number(),
 			longitude: z.number(),
 		})

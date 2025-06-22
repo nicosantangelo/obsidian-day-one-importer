@@ -177,7 +177,7 @@ describe('updateFrontMatter', () => {
 		});
 
 		expect(vault.getFileByPath.mock.calls[1][0]).toBe(
-			'day-one-out/202404192155530.md'
+			'day-one-out/202404192255530.md'
 		);
 		expect(vault.getFileByPath.mock.calls[2][0]).toBe(
 			'day-one-out/033151111032023.md'

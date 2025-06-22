@@ -199,7 +199,7 @@ describe('importJson', () => {
 		);
 
 		expect(vault.create.mock.calls[0][0]).toBe(
-			'day-one-out/202404192155530.md'
+			'day-one-out/202404192255530.md'
 		);
 		expect(vault.create.mock.calls[1][0]).toBe(
 			'day-one-out/033151111032023.md'
